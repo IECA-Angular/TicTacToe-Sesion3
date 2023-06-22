@@ -1,10 +1,54 @@
 <div class="container">
-  <div class="grid">
-    <div class="cell"
-    *ngFor="let celda of celdas; let i = index"
-    (click)="clickCelda(i)"
-    >
-      {{ celda === 1 ? 'X' : celda === 2 ? 'O' : '' }}
+
+  <div class="scoreboard" *ngIf="this.showScoreboard">
+    <h3>Score</h3>
+    <div class="score-row" *ngFor="let winner of this.winnersBoard; let i = index;">
+      <div>{{ i + 1 }}</div>
+      <div>Jugador {{ winner.player }}</div>
+      <div>{{ winner.date | date : 'dd/MM/YYYY' }}</div>
+    </div>
+    <div class="action" (click)="this.showScoreboard = false">
+      <a>Cerrar</a>
     </div>
   </div>
+
+
+  <ng-container *ngIf="!this.showScoreboard">
+
+
+    <div class="winner-banner" *ngIf="this.gameStatus === 'win'">
+      <p>¡ El jugador {{this.playerWinner}} es ganador!</p>
+      <button (click)="this.showScoreboard = true">Mostrar scoreboard</button>
+    </div>
+
+    <div class="tie-banner" *ngIf="this.gameStatus === 'tie'">
+      <p>¡Empate!</p>
+      <button (click)="this.showScoreboard = true">Mostrar scoreboard</button>
+    </div>
+
+    <h2 class="player-text">
+      Jugador {{ player }}
+    </h2>
+
+    <div class="container-grid">
+      <div *ngFor="let cell of this.board; let i = index" class="cell"
+      (click)="this.selectCell(i)"
+      [ngClass]="{
+        'player1': this.board[i] === 1,
+        'player2': this.board[i] === 2,
+        'placed': this.board[i] !== 0
+      }"
+      >
+
+      </div>
+    </div>
+
+    <button (click)="this.newGame()">Nuevo Juego</button>
+
+  </ng-container>
+
+
+
+
+
 </div>
